@@ -32,7 +32,7 @@ int main()
     }
     
     f();
-
+    //push close button
     // Close the connection
     sqlite3_close(db);
     return (0); 
@@ -49,9 +49,12 @@ void f(){
     while (!done) {
         switch (sqlite3_step(stmt)) {
             case SQLITE_ROW:
-                text = sqlite3_column_text(stmt, 1);
+            for(int i=0; i<3;i++){
+                text = sqlite3_column_text(stmt, i);
                 cout << text << endl;
+            }
                 break;
+            
 
             case SQLITE_DONE:
                 done = true;
@@ -68,3 +71,4 @@ void f(){
 }
 
 //gcc sqlite3.c -c   ทำแบบนี้มันจะไม่ได้ exe แต่จะได้เป็น object file ที่ลิงค์เข้ากับโค้ดให้โปรแกรมเราไปเรียกใช้ตอน compile ครับ
+//g++ main.cpp sqlite3.o
