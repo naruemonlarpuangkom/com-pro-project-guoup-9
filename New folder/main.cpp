@@ -1,16 +1,16 @@
-#include <iostream> 
-#include<stdlib.h>
+#include <iostream>
 #include "sqlite3.h"
 
 using namespace std;
 
+// Pointer to SQLite connection 
 sqlite3* db; 
 
-void f();
+//prototype
+void allmenu();
+
 int main() 
 { 
-    // Pointer to SQLite connection
-    //sqlite3* db; 
     sqlite3_stmt * stmt;
     
     // Save the connection result
@@ -25,20 +25,20 @@ int main()
     } else {
 
         cout << "Opened Database Successfully!" << endl; 
-        sqlite3_prepare( db, "SELECT * FROM menu;", -1, &stmt, NULL );//preparing the statement
+        /*sqlite3_prepare( db, "SELECT * FROM menu;", -1, &stmt, NULL );//preparing the statement
         sqlite3_step( stmt );//executing the statement
         char * str = (char *) sqlite3_column_text( stmt, 1 );///reading the 1st column of the result
-        //cout << str << endl;
+        //cout << str << endl;*/
     }
     
-    f();
-    //push close button
+    allmenu();
+    // push close button
     // Close the connection
     sqlite3_close(db);
     return (0); 
 } 
 
-void f(){
+void allmenu(){
 
     sqlite3_stmt * stmt;
   
@@ -69,6 +69,5 @@ void f(){
     sqlite3_finalize(stmt);
 
 }
-
 //gcc sqlite3.c -c   ทำแบบนี้มันจะไม่ได้ exe แต่จะได้เป็น object file ที่ลิงค์เข้ากับโค้ดให้โปรแกรมเราไปเรียกใช้ตอน compile ครับ
 //g++ main.cpp sqlite3.o
