@@ -1,0 +1,7 @@
+CREATE DATABASE testDB;
+
+CREATE TABLE menu (
+    Number int,
+    Menu varchar(255),
+    Price int
+);
