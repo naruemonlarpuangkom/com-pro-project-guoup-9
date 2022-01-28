@@ -11,6 +11,7 @@ sqlite3* db;
 void allmenu();
 void showmenu();
 void addmenu();
+void deletemenu();
 int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 int main() 
@@ -35,9 +36,10 @@ int main()
         //char * str = (char *) sqlite3_column_text( stmt, 1 );///reading the 1st column of the result
         //cout << str << endl;
     }
-    //showmenu();
+    //showmenu(1);
     allmenu();
-    addmenu();
+    //addmenu();
+    deletemenu();
 
     // Close the connection
     sqlite3_close(db);
@@ -77,10 +79,12 @@ void allmenu(){
 
 }
 
-void showmenu(int menuid){
+void showmenu(){
     sqlite3_stmt * stmt;
   
-    int id=menuid;
+    int id;
+    cin >> id;
+    id -= 1;
 
     sqlite3_prepare( db, "SELECT * FROM menu;", -1, &stmt, NULL );//preparing the statement
     const unsigned char* text;
@@ -108,6 +112,16 @@ void addmenu(){
     sqlite3_prepare( db, sqlstatement.c_str(), -1, &stmt, NULL );//preparing the statement
     sqlite3_exec(db, sqlstatement.c_str(), callback, 0, NULL);
     
+}
+
+void deletemenu(){
+    int id;
+    cin >> id;
+    id-=1;
+    sqlite3_stmt * stmt;
+    string sqlstatement = "DELETE FROM menu WHERE food_id = 'id';";
+    sqlite3_prepare( db, sqlstatement.c_str(), -1, &stmt, NULL );//preparing the statement
+    sqlite3_exec(db, sqlstatement.c_str(), callback, 0, NULL);
 }
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName){
