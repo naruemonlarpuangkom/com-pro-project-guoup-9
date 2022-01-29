@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h> 
+#include<iomanip>
 #include "sqlite3.h"
 
 using namespace std;
@@ -37,7 +38,7 @@ int main()
     }
     //showmenu();
     allmenu();
-    addmenu();
+    //addmenu();
 
     // Close the connection
     sqlite3_close(db);
@@ -52,16 +53,23 @@ void allmenu(){
 
     const unsigned char* text;
     bool done = false;
+
+    cout<<"---------------------------------------------------------\n\n";
+    cout <<setw(10)<<right<<"Food ID"<<"\t"<<setw(15)<<left <<"Foo Name"<<setw(10)<<right<<"Price"<<endl;
     while (!done) {
         switch (sqlite3_step(stmt)) {
             case SQLITE_ROW:
             for(int i=0; i<3;i++){
                 text = sqlite3_column_text(stmt, i);
-                cout << text <<" ";
+                if(i==1)
+                {
+                    cout <<"\t"<<setw(15)<<left; 
+                } 
+                else cout <<setw(10)<<right;
+                cout <<text ;
             }
                 break;
             
-
             case SQLITE_DONE:
                 done = true;
                 break;
@@ -72,6 +80,7 @@ void allmenu(){
         }
         cout << endl;
     }
+    cout<<"---------------------------------------------------------\n";
 
     sqlite3_finalize(stmt);
 
