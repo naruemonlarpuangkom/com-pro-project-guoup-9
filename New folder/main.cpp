@@ -8,11 +8,11 @@ using namespace std;
 sqlite3* db; 
 
 //prototype
-void allmenu();
-void showmenu();
-void addmenu();
-void deletemenu();
+void allmenu();     void showmenu();    void addmenu();     void deletemenu();
 int callback(void *NotUsed, int argc, char **argv, char **azColName);
+
+void select_table();
+void checkbill();
 
 int main() 
 { 
@@ -30,16 +30,13 @@ int main()
     } else {
 
         cout << "Opened Database Successfully!" << endl; 
-        //sqlite3_prepare( db, "SELECT * FROM menu;", -1, &stmt, NULL );//preparing the statement  
-        //int x=sqlite3_step( stmt );//executing the statement
-        //cout << x;
-        //char * str = (char *) sqlite3_column_text( stmt, 1 );///reading the 1st column of the result
-        //cout << str << endl;
+        
     }
-    //showmenu(1);
+    //showmenu();
     allmenu();
     //addmenu();
     deletemenu();
+    allmenu();
 
     // Close the connection
     sqlite3_close(db);
@@ -115,11 +112,10 @@ void addmenu(){
 }
 
 void deletemenu(){
-    int id;
+    string id;
     cin >> id;
-    id-=1;
     sqlite3_stmt * stmt;
-    string sqlstatement = "DELETE FROM menu WHERE food_id = 'id';";
+    string sqlstatement = "DELETE FROM menu WHERE food_id = ('" + id + "');";
     sqlite3_prepare( db, sqlstatement.c_str(), -1, &stmt, NULL );//preparing the statement
     sqlite3_exec(db, sqlstatement.c_str(), callback, 0, NULL);
 }
@@ -142,6 +138,12 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName){
 
     // Return successful
     return 0;
+}
+
+void checkbill(){
+    sqlite3_stmt * stmt;
+  
+    sqlite3_prepare( db, "SELECT * FROM menu;", -1, &stmt, NULL );//preparing the statement
 }
 //gcc sqlite3.c -c   ทำแบบนี้มันจะไม่ได้ exe แต่จะได้เป็น object file ที่ลิงค์เข้ากับโค้ดให้โปรแกรมเราไปเรียกใช้ตอน compile ครับ
 //how to run (safe file first) ; g++ main.cpp sqlite3.o ; ./a.exe

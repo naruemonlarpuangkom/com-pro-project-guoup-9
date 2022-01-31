@@ -1,0 +1,1 @@
+g++ main.cpp sqlite3.o ; ./a.exe
