@@ -9,7 +9,7 @@ using namespace std;
 sqlite3* db; 
 
 //prototype
-void allmenu();     void showmenu();    void addmenu();     void deletemenu();
+void allmenu();     void showmenu();    void addmenu();     void deletemenu();      void edit_menu();
 int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 void select_table();
@@ -17,30 +17,24 @@ void checkbill();
 
 int main() 
 { 
-    sqlite3_stmt * stmt;
-    
-    // Save the connection result
+    sqlite3_stmt * stmt;    // Save the connection result
     int exit = 0;
     exit = sqlite3_open("database.db", &db); 
   
     // Test if there was an error
     if (exit) { 
-        
         cout << "DB Open Error: " << sqlite3_errmsg(db) << endl; 
-        
     } else {
-
         cout << "Opened Database Successfully!" << endl; 
-        
     }
+
     //showmenu();
     allmenu();
     //addmenu();
-    deletemenu();
+    //deletemenu();
     allmenu();
-
-    // Close the connection
-    sqlite3_close(db);
+  
+    sqlite3_close(db);// Close the connection
     return (0); 
 } 
 
@@ -54,7 +48,7 @@ void allmenu(){
     bool done = false;
 
     cout<<"---------------------------------------------------------\n\n";
-    cout <<setw(10)<<right<<"Food ID"<<"\t"<<setw(15)<<left <<"Foo Name"<<setw(10)<<right<<"Price"<<endl;
+    cout <<setw(10)<<right<<"Food ID"<<"\t"<<setw(15)<<left <<"Food Name"<<setw(10)<<right<<"Price"<<endl;
     while (!done) {
         switch (sqlite3_step(stmt)) {
             case SQLITE_ROW:
@@ -112,7 +106,10 @@ void addmenu(){
     sqlite3_stmt * stmt;
     
     string name,price;
-    cin >> name >> price;
+    cout << "Input food name : "
+    cin >> name ;
+    cout << "Input food price : "
+    cin >> price ;
 
     string sqlstatement = "INSERT INTO menu (food_name, price) VALUES ('" + name + "','" + price + "');";
     sqlite3_prepare( db, sqlstatement.c_str(), -1, &stmt, NULL );//preparing the statement
@@ -122,11 +119,23 @@ void addmenu(){
 
 void deletemenu(){
     string id;
+    cout << "Input food ID : "
     cin >> id;
     sqlite3_stmt * stmt;
     string sqlstatement = "DELETE FROM menu WHERE food_id = ('" + id + "');";
     sqlite3_prepare( db, sqlstatement.c_str(), -1, &stmt, NULL );//preparing the statement
     sqlite3_exec(db, sqlstatement.c_str(), callback, 0, NULL);
+}
+
+void edit_menu(){
+    int select;
+    cout << "what you want to edit\n"<<"1.Add menu ( press 1 )\n"<<"2.Delete menu ( press 2 )\n"<<"3.Go back ( press 3 )\n"<<"Input your choice : ";
+    cin >> select;
+
+    if(select == 1) addmenu();
+    if(select == 2) deletemenu();
+    if(select == 3) //put action here ;
+
 }
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName){
